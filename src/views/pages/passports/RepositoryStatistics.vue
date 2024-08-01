@@ -5,8 +5,8 @@
         <p>Passport control -> Aggregate statistics</p>
     </div>
 </template> -->
-<script setup>
-    import { useDppStore } from '@/store/dpp.js';
+<script setup lang="ts">
+    import { useDppStore } from '@/store/dpp';
     // import { Colors } from 'chart.js';
     // import Chart from 'primevue/chart';
     // Chart.register(Colors);

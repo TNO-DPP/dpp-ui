@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
     import { ref, onMounted, watch } from 'vue';
     // import * as pdfjsLib from 'pdfjs-dist';
     import * as pdfjs from 'pdfjs-dist/build/pdf.min.mjs';

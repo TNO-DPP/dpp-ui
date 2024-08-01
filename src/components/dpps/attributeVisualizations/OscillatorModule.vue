@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
     import { toRefs, ref, watch } from 'vue';
     import { onMounted } from 'vue';
     const props = defineProps({

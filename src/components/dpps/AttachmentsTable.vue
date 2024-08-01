@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
     import { ref, watch, toRefs } from 'vue';
     import PDFViewer from './PDFViewer.vue';
     import pdfIcon from '/src/assets/images/PDF_file_icon.svg';

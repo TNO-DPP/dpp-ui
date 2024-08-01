@@ -1,6 +1,6 @@
-<script setup>
+<script setup lang="ts">
     import { ref, toRefs, watch } from 'vue';
-    import { useDppStore } from '@/store/dpp.js';
+    import { useDppStore } from '@/store/dpp';
 
     const props = defineProps({
         timelineEvents: Object

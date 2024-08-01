@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
     // import Card from 'primevue/card';
     import Timeline from '@/components/dpps/Timeline.vue';
     import TShirt from '@/components/dpps/attributeVisualizations/TShirt.vue';
@@ -8,7 +8,7 @@
     // import MaterialComposition from '@/components/dpps/MaterialComposition.vue';
     import AttachmentsTable from '@/components/dpps/AttachmentsTable.vue';
     import General from '@/components/dpps/General.vue';
-    import { useDppStore } from '@/store/dpp.js';
+    import { useDppStore } from '@/store/dpp';
     // import dppData from '@/models/templates.json';
     import { useToast } from 'primevue/usetoast';
     const toast = useToast();

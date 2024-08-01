@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
     import { ref, toRefs, watch } from 'vue';
     import { onMounted } from 'vue';
     // import { Button } from 'primevue/button';
@@ -6,7 +6,7 @@
     // import { InputText } from 'primevue/inputtext';
     // import { Textarea } from 'primevue/textarea';
     import { useToast } from 'primevue/usetoast';
-    import { useDppStore } from '@/store/dpp.js';
+    import { useDppStore } from '@/store/dpp';
 
     const props = defineProps({
         uuidValue: Object

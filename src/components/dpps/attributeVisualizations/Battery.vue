@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
     import { onMounted, toRefs, ref, watch } from 'vue';
     // import { Card } from 'primevue/card';
     // import { Chart } from 'primevue/chart';
