@@ -1,44 +1,57 @@
 <script setup lang="ts">
-    import Card from 'primevue/card';
-    import { ref, toRefs, watch } from 'vue';
-    import { onMounted } from 'vue';
-    // import { Panel } from 'primevue/panel';
+import { type DigitalProductPassport, type DppTemplate, type Entity } from '@/types/dpp';
+import Card from 'primevue/card';
+import { ref, toRefs, watch } from 'vue';
+import { onMounted } from 'vue';
 
-    const props = defineProps({
-        generalData: Object
-    });
+interface GeneralData {
+    manufacturer?: Entity;
+    instantiated_from?: DppTemplate;
+    current_owner?: Entity;
+    known_past_owners?: Entity[];
+    economic_operator?: Entity;
+    tags?: string[];
+}
 
-    const localGeneralData = ref();
-    const instantiatedFrom = ref(null);
-    const currentOwner = ref(null);
-    const manufacturer = ref(null);
-    const knownPastOwners = ref(null);
-    const economicOperator = ref(null);
-    const tags = ref([]);
+const props = defineProps({
+    generalData: {
+        type: Object,
+        default: () => ({}),
+    },
+});
 
-    const generalData = toRefs(props);
-    watch(generalData.generalData, (newVal) => {
-        console.log('General Data Loaded:', newVal);
-        localGeneralData.value = newVal;
-        manufacturer.value = localGeneralData.value?.manufacturer;
-        instantiatedFrom.value = localGeneralData.value?.instantiated_from;
-        currentOwner.value = localGeneralData.value?.current_owner;
-        knownPastOwners.value = localGeneralData.value?.known_past_owners;
-        economicOperator.value = localGeneralData.value?.economic_operator;
-        tags.value = localGeneralData.value?.tags;
-    });
+const localGeneralData = ref();
+const instantiatedFrom = ref<DppTemplate | undefined>();
+const currentOwner = ref<Entity | undefined>();
+const manufacturer = ref<Entity | undefined>();
+const knownPastOwners = ref<Entity[]>([]);
+const economicOperators = ref<Entity[]>([]);
+const tags = ref([]);
 
-    // const manufacturer = computed(() => localGeneralData.value?.manufacturer || {});
-    // // const instantiatedFrom = computed(() => localGeneralData.value?.instantiated_from || {});
+const generalData = toRefs(props);
+console.log({ generalData })
+watch(generalData.generalData, (newVal) => {
+    console.log('General Data Loaded:', newVal);
+    localGeneralData.value = newVal;
+    manufacturer.value = localGeneralData.value?.manufacturer;
+    instantiatedFrom.value = localGeneralData.value?.instantiated_from;
+    currentOwner.value = localGeneralData.value?.current_owner;
+    knownPastOwners.value = localGeneralData.value?.known_past_owners;
+    economicOperators.value = [localGeneralData.value?.economic_operator];
+    tags.value = localGeneralData.value?.tags;
+});
 
-    // const currentOwner = computed(() => localGeneralData.value?.current_owner || {});
-    // const knownPastOwners = computed(() => localGeneralData.value?.known_past_owners || []);
-    // const economicOperator = computed(() => localGeneralData.value?.economic_operator || []);
-    // const tags = computed(() => localGeneralData.value?.tags || []);
+// const manufacturer = computed(() => localGeneralData.value?.manufacturer || {});
+// // const instantiatedFrom = computed(() => localGeneralData.value?.instantiated_from || {});
 
-    onMounted(() => {
-        console.log('General Data in Component (mounted):', props.generalData);
-    });
+// const currentOwner = computed(() => localGeneralData.value?.current_owner || {});
+// const knownPastOwners = computed(() => localGeneralData.value?.known_past_owners || []);
+// const economicOperator = computed(() => localGeneralData.value?.economic_operator || []);
+// const tags = computed(() => localGeneralData.value?.tags || []);
+
+onMounted(() => {
+    console.log('General Data in Component (mounted):', props.generalData);
+});
 </script>
 
 <template>
@@ -51,7 +64,8 @@
                 <h5>Product Information</h5>
                 <p><strong>ID: </strong> {{ localGeneralData.id }}</p>
                 <p><strong>Registration ID: </strong> {{ localGeneralData.registration_id }}</p>
-                <p><strong>Creation Timestamp: </strong> {{ new Date(localGeneralData.creation_timestamp).toLocaleString() }}</p>
+                <p><strong>Creation Timestamp: </strong> {{ new
+                    Date(localGeneralData.creation_timestamp).toLocaleString() }}</p>
                 <div>
                     <span v-for="tag in tags" :key="tag" class="tag">{{ tag }}</span>
                 </div>
@@ -75,7 +89,8 @@
                 <div>
                     <p><strong>Name:</strong> {{ currentOwner.name }}</p>
                     <p><strong>Full Name:</strong> {{ currentOwner.full_name }}</p>
-                    <p><strong>Facility:</strong> {{ currentOwner.facility.map((f) => f.name).join(', ') }}</p>
+                    <p><strong>Facility:</strong> {{ currentOwner.facility ? currentOwner.facility.map((f) =>
+                        f.name).join(', ') : 'unknown' }}</p>
                     <p><strong>Batch ID:</strong> {{ currentOwner.batch_id || 'unknown' }}</p>
                 </div>
             </template>
@@ -88,25 +103,28 @@
                 <div>
                     <p><strong>Name:</strong> {{ manufacturer.name }}</p>
                     <p><strong>Full Name:</strong> {{ manufacturer.full_name }}</p>
-                    <p><strong>Facility:</strong> {{ manufacturer.facility.map((f) => f.name).join(', ') }}</p>
+                    <p><strong>Facility:</strong> {{ manufacturer.facility ? manufacturer.facility.map((f) =>
+                        f.name).join(', ') : 'unknown' }}</p>
                     <p><strong>Batch ID:</strong> {{ manufacturer.batch_id }}</p>
                 </div>
             </template>
         </Card>
     </div>
-    <div v-if="economicOperator">
+    <div v-if="economicOperators">
         <Card>
             <template #content>
                 <h5>Known economic operators</h5>
                 <div class="p-grid">
-                    <div class="p-col-12 lg:p-col-6" v-for="operator in economicOperator" :key="operator.id">
+                    <div class="p-col-12 lg:p-col-6" v-for="operator in economicOperators" :key="operator.id">
                         <Card>
                             <template #content>
                                 <div>
                                     <p><strong>ID: </strong> {{ operator.id }}</p>
                                     <p><strong>Name: </strong> {{ operator.name }}</p>
                                     <p><strong>Full Name: </strong> {{ operator.full_name }}</p>
-                                    <p><strong>Repository Address:</strong> {{ operator.repository_address.map((ra) => ra.hostname).join(', ') }}</p>
+                                    <p><strong>Repository Address:</strong> {{ operator.repository_address ?
+                                        operator.repository_address.map((ra) =>
+                                            ra.hostname).join(', ') : 'unknown' }} </p>
                                 </div>
                             </template>
                         </Card>
@@ -127,7 +145,8 @@
                                     <p><strong>ID: </strong> {{ owner.id }}</p>
                                     <p><strong>Name: </strong> {{ owner.name }}</p>
                                     <p><strong>Full Name: </strong> {{ owner.full_name }}</p>
-                                    <p><strong>Facility:</strong> {{ owner.facility.map((f) => f.name).join(', ') }}</p>
+                                    <p><strong>Facility:</strong> {{ owner.facility ? owner.facility.map((f) =>
+                                        f.name).join(', ') : 'unknown' }} </p>
                                 </div>
                             </template>
                         </Card>
@@ -139,20 +158,22 @@
 </template>
 
 <style scoped>
-    .tag {
-        display: inline-block;
-        background: #e0e0e0;
-        color: #333;
-        padding: 0.25em 0.5em;
-        margin: 0.25em;
-        border-radius: 4px;
-    }
-    .p-grid {
-        margin-bottom: 1em;
-    }
-    .p-card {
-        margin-bottom: 1em;
-    }
+.tag {
+    display: inline-block;
+    background: #e0e0e0;
+    color: #333;
+    padding: 0.25em 0.5em;
+    margin: 0.25em;
+    border-radius: 4px;
+}
+
+.p-grid {
+    margin-bottom: 1em;
+}
+
+.p-card {
+    margin-bottom: 1em;
+}
 </style>
 <!-- <ScrollPanel style="height: 200px">
     <p>

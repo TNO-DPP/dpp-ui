@@ -1,71 +1,71 @@
 <script setup lang="ts">
-    import { toRefs, ref, watch } from 'vue';
-    import { onMounted } from 'vue';
-    const props = defineProps({
-        attributeData: Object
-    });
-    const localAttributeData = ref();
+import { toRefs, ref, watch } from 'vue';
+import { onMounted } from 'vue';
+const props = defineProps({
+    attributeData: Object
+});
+const localAttributeData = ref();
 
-    const attributeData = toRefs(props);
+const attributeData = toRefs(props);
 
-    const articleNumber = ref('');
-    const supplierName = ref('');
-    const materialComposition = ref([]);
-    const reparability = ref();
-    const carbonEmissionsData = ref({});
-    const waterUsageData = ref({});
+const articleNumber = ref('');
+const supplierName = ref('');
+const materialComposition = ref([]);
+const reparability = ref();
+const carbonEmissionsData = ref({});
+const waterUsageData = ref({});
 
-    watch(attributeData.attributeData, (newVal) => {
-        console.log('Attribute Data Loaded:', newVal);
-        localAttributeData.value = newVal;
-        if (newVal) {
-            articleNumber.value = newVal.article_number;
-            supplierName.value = newVal.supplier.name;
-            materialComposition.value = newVal.material_composition;
-            reparability.value = newVal.reparability;
-            createChartData(newVal.material_composition);
-        }
-    });
+watch(attributeData.attributeData, (newVal) => {
+    console.log('Attribute Data Loaded:', newVal);
+    localAttributeData.value = newVal;
+    if (newVal) {
+        articleNumber.value = newVal.article_number;
+        supplierName.value = newVal.supplier.name;
+        materialComposition.value = newVal.material_composition;
+        reparability.value = newVal.reparability;
+        createChartData(newVal.material_composition);
+    }
+});
 
-    onMounted(() => {
-        console.log('General Data in Component (mounted):', props.attributeData);
-        localAttributeData.value = props.attributeData;
-        if (props.attributeData) {
-            articleNumber.value = props.attributeData.article_number;
-            supplierName.value = props.attributeData.supplier.name;
-            materialComposition.value = props.attributeData.material_composition;
-            reparability.value = props.attributeData.reparability;
-            createChartData(props.attributeData.material_composition);
-        }
-    });
+onMounted(() => {
+    console.log('General Data in Component (mounted):', props.attributeData);
+    localAttributeData.value = props.attributeData;
+    if (props.attributeData) {
+        articleNumber.value = props.attributeData.article_number;
+        supplierName.value = props.attributeData.supplier.name;
+        materialComposition.value = props.attributeData.material_composition;
+        reparability.value = props.attributeData.reparability;
+        createChartData(props.attributeData.material_composition);
+    }
+});
 
-    const createChartData = (materialData) => {
-        const labels = materialData.map((item) => item.name);
-        const emissions = materialData.map((item) => item.carbon_emissions_cost_kg_CO2);
-        const waterUsage = materialData.map((item) => item.water_usage_liters);
+const createChartData = (materialData) => {
+    const labels = materialData.map((item) => item.name);
+    const emissions = materialData.map((item) => item.carbon_emissions_cost_kg_CO2);
+    const waterUsage = materialData.map((item) => item.water_usage_liters);
 
-        carbonEmissionsData.value = {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Carbon Emissions (kg CO2e)',
-                    backgroundColor: '#42A5F5',
-                    data: emissions
-                }
-            ]
-        };
-
-        waterUsageData.value = {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Water Usage (liters)',
-                    backgroundColor: '#66BB6A',
-                    data: waterUsage
-                }
-            ]
-        };
+    carbonEmissionsData.value = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Carbon Emissions (kg CO2e)',
+                backgroundColor: '#42A5F5',
+                data: emissions
+            }
+        ]
     };
+
+    waterUsageData.value = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Water Usage (liters)',
+                backgroundColor: '#66BB6A',
+                data: waterUsage
+            }
+        ]
+    };
+};
 </script>
 <!-- <template>
     <pre>{{ localAttributeData }}</pre>
@@ -113,35 +113,25 @@
                 <div class="col-12 lg:col-6 xl:col-6">
                     <div class="card">
                         <h5>Carbon Emissions (kg CO2e)</h5>
-                        <Chart
-                            v-if="carbonEmissionsData"
-                            type="bar"
-                            :data="carbonEmissionsData"
-                            :options="{
-                                plugins: {
-                                    legend: {
-                                        position: 'right'
-                                    }
+                        <Chart v-if="carbonEmissionsData" type="bar" :data="carbonEmissionsData" :options="{
+                            plugins: {
+                                legend: {
+                                    position: 'right'
                                 }
-                            }"
-                        />
+                            }
+                        }" />
                     </div>
                 </div>
                 <div class="col-12 lg:col-6 xl:col-6">
                     <div class="card">
                         <h5>Water Usage (liters)</h5>
-                        <Chart
-                            v-if="waterUsageData"
-                            type="bar"
-                            :data="waterUsageData"
-                            :options="{
-                                plugins: {
-                                    legend: {
-                                        position: 'right'
-                                    }
+                        <Chart v-if="waterUsageData" type="bar" :data="waterUsageData" :options="{
+                            plugins: {
+                                legend: {
+                                    position: 'right'
                                 }
-                            }"
-                        />
+                            }
+                        }" />
                     </div>
                 </div>
             </div>

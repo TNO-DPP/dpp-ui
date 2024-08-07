@@ -8,7 +8,7 @@ const layoutConfig = reactive({
     // theme: 'aura-dark-green',
     theme: 'aura-light-green',
     scale: 14,
-    activeMenuItem: null
+    activeMenuItem: null as string | null
 });
 
 const layoutState = reactive({
@@ -21,12 +21,12 @@ const layoutState = reactive({
 });
 
 export function useLayout() {
-    const setScale = (scale) => {
+    const setScale = (scale: number) => {
         layoutConfig.scale = scale;
     };
 
-    const setActiveMenuItem = (item) => {
-        layoutConfig.activeMenuItem = item.value || item;
+    const setActiveMenuItem = (item: string) => {
+        layoutConfig.activeMenuItem = item;
     };
 
     const onMenuToggle = () => {
@@ -45,5 +45,13 @@ export function useLayout() {
 
     const isDarkTheme = computed(() => layoutConfig.darkTheme);
 
-    return { layoutConfig: toRefs(layoutConfig), layoutState: toRefs(layoutState), setScale, onMenuToggle, isSidebarActive, isDarkTheme, setActiveMenuItem };
+    return {
+        layoutConfig: toRefs(layoutConfig),
+        layoutState: toRefs(layoutState),
+        setScale,
+        onMenuToggle,
+        isSidebarActive,
+        isDarkTheme,
+        setActiveMenuItem
+    };
 }

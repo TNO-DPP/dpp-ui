@@ -1,4 +1,4 @@
-<script></script>
+<script setup lang="ts"></script>
 
 <template>
     <div class="main-div">
@@ -7,9 +7,9 @@
 </template>
 
 <style lang="scss" scoped>
-    .main-div {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-    }
+.main-div {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
 </style>

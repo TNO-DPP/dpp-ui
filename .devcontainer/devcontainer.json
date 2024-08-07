@@ -11,7 +11,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"Vue.volar"
+				"Vue.volar",
+				"ms-azuretools.vscode-docker"
 			]
 		}
 	}
